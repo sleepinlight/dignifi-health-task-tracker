@@ -36,3 +36,16 @@
     transform: rotate(360deg);
   }
 }
+
+.tasks-container {
+  margin: 50px auto;
+  width: 400px;
+}
+
+.tasks-spin-loader {
+  margin: 0 auto;
+}
+
+.create-task-button .ant-float-btn-body {
+  background-color: green;
+}

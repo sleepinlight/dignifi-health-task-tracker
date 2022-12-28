@@ -1,0 +1,12 @@
+.task-card {
+  margin-bottom: 10px;
+  min-width: 360px;
+}
+
+.task-header-button {
+  margin-left: 6px;
+}
+
+.task-complete-button {
+  background-color: green;
+}

@@ -1,43 +1,55 @@
-var express = require("express");
-var db = require("../db");
+const express = require("express");
+const db = require("../db");
+const { body, validationResult, check } = require("express-validator");
 
-function fetchTasks(req, res, next) {
-  db.all(
-    "SELECT * FROM Tasks WHERE userId = ?",
-    [req.params.userId],
-    function (err, rows) {
-      if (err) {
-        return next(err);
-      }
+const coerceBoolean = (val) => {
+  let boolVal = val;
+  if (val && typeof val === "string") {
+    boolVal = JSON.parse(val);
+  }
+  return boolVal;
+};
 
-      var tasks = rows.map(function (row) {
-        return {
-          id: row.id,
-          title: row.title,
-          notes: row.notes,
-          completed: row.completed == 1 ? true : false,
-        };
-      });
-      res.tasks = tasks;
-      next();
-    }
-  );
-}
+const setReminderDateDefault = (date, minutes) => {
+  return new Date(date.getTime() + minutes * 60000);
+};
 
 var router = express.Router();
 
 router.get(
   "/api/tasks/:userId",
   (req, res, next) => {
-    console.log(req);
     // if (!req.user) {
     //   res.status(400).json({ error: err.message });
     //   return;
     // }
     next();
   },
-  fetchTasks,
-  function (req, res, next) {
+  (req, res, next) => {
+    db.all(
+      "SELECT * FROM Tasks WHERE userId = ?",
+      [req.params.userId],
+      (err, rows) => {
+        if (err) {
+          return next(err);
+        }
+
+        var tasks = rows.map((row) => {
+          return {
+            id: row.id,
+            title: row.title,
+            notes: row.notes,
+            completed: row.completed == 1 ? true : false,
+            reminderSet: row.reminderSet == 1 ? true : false,
+            reminderDate: row.reminderDate,
+          };
+        });
+        res.tasks = tasks;
+        next();
+      }
+    );
+  },
+  (req, res, next) => {
     return res.status(200).json(res.tasks);
   }
 );
@@ -45,18 +57,16 @@ router.get(
 router.post(
   "/api/tasks",
   (req, res, next) => {
-    console.log("what");
-    console.log(req);
     req.body.title = req.body.title.trim();
     next();
   },
-  function (req, res, next) {
+  ((req, res, next) => {
     if (req.body.title !== "") {
       return next();
     }
     return res.redirect("/" + (req.body.filter || ""));
   },
-  function (req, res, next) {
+  (req, res, next) => {
     db.run(
       "INSERT INTO tasks (title, notes, reminderSet, reminderDate, dateCreated, userId) VALUES (?, ?, ?, ?, ?, ?)",
       [
@@ -67,22 +77,56 @@ router.post(
         Date("now"),
         req.body.userId,
       ],
-      function (err) {
+      (err) => {
         if (err) {
           return next(err);
         }
         return res.status(201).json(null);
       }
     );
-  }
+  })
 );
 
-router.put("/api/task/:id/complete", (req, res, next) => {});
+router.put("/api/task/:id/complete", (req, res, next) => {
+  if (req.params.id) {
+    db.run(
+      "UPDATE tasks SET completed = ? WHERE id = ?",
+      [coerceBoolean(req.body.completed) ? 1 : 0, req.params.id],
+      (err) => {
+        if (err) {
+          return next(err);
+        }
+        return res.status(204).json(null);
+      }
+    );
+  }
+});
 
-router.put("/api/task/:id/reminder", (req, res, next) => {});
+router.put("/api/task/:id/reminder", (req, res, next) => {
+  const test = new Date();
+  console.log(test);
+  console.log(test.getTime());
+  console.log(setReminderDateDefault(new Date(), 10));
+  if (req.params.id) {
+    db.run(
+      "UPDATE tasks SET reminderSet = ?, reminderDate = ? WHERE id = ?",
+      [
+        coerceBoolean(req.body.reminderSet) ? 1 : 0,
+        setReminderDateDefault(new Date(), 10),
+        req.params.id,
+      ],
+      (err) => {
+        if (err) {
+          return next(err);
+        }
+        return res.status(204).json(null);
+      }
+    );
+  }
+});
 
 router.delete("/api/task/:id/delete", (req, res, next) => {
-  db.run("DELETE FROM tasks WHERE id = ?", [req.params.id], function (err) {
+  db.run("DELETE FROM tasks WHERE id = ?", [req.params.id], (err) => {
     if (err) {
       return next(err);
     }

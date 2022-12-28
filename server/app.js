@@ -1,7 +1,6 @@
 const express = require("express");
 const app = express();
 require("dotenv").config();
-// var sqlite3 = require("sqlite3").verbose();
 const cors = require("cors");
 var jwt = require("jsonwebtoken");
 var bcrypt = require("bcrypt");
@@ -10,115 +9,9 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 var db = require("./db");
 
-// const DBSOURCE = "usersdb.sqlite";
 const auth = require("./middleware");
 
 const port = 3004;
-
-// let db = new sqlite3.Database(DBSOURCE, (err) => {
-//   if (err) {
-//     // Cannot open database
-//     console.error(err.message);
-//     throw err;
-//   } else {
-//     var salt = bcrypt.gensaltSync(10);
-
-//     db.run(
-//       `CREATE TABLE Users (
-//             Id INTEGER PRIMARY KEY AUTOINCREMENT,
-//             username text,
-//             email text,
-//             password text,
-//             salt text,
-//             Token text,
-//             DateLoggedIn DATE,
-//             dateCreated DATE
-//             )`,
-//       (err) => {
-//         if (err) {
-//           // Table already created
-//         } else {
-//           // Table just created, creating some rows
-//           var insert =
-//             "INSERT INTO Users (username, email, password, salt, dateCreated) VALUES (?,?,?,?,?)";
-//           db.run(insert, [
-//             "user1",
-//             "user1@example.com",
-//             bcrypt.hashSync("user1", salt),
-//             salt,
-//             Date("now"),
-//           ]);
-//           db.run(insert, [
-//             "user2",
-//             "user2@example.com",
-//             bcrypt.hashSync("user2", salt),
-//             salt,
-//             Date("now"),
-//           ]);
-//           db.run(insert, [
-//             "user3",
-//             "user3@example.com",
-//             bcrypt.hashSync("user3", salt),
-//             salt,
-//             Date("now"),
-//           ]);
-//           db.run(insert, [
-//             "user4",
-//             "user4@example.com",
-//             bcrypt.hashSync("user4", salt),
-//             salt,
-//             Date("now"),
-//           ]);
-//         }
-//       }
-//     );
-
-//     // db.run(
-//     //   `CREATE TABLE Tasks (
-//     //         Id INTEGER AUTOINCREMENT,
-//     //         Title text,
-//     //         Notes text,
-//     //         Completed INTEGER DEFAULT 0,
-//     //         ReminderSet INTEGER DEFAULT 0,
-//     //         ReminderDate DATE,
-//     //         dateCreated DATE,
-//     //         UserId INTEGER,
-//     //         FOREIGN KEY(UserId) REFERENCES Users(Id)
-//     //         )`,
-//     //   (err) => {
-//     //     if (err) {
-//     //       // Table already created
-//     //     } else {
-//     //       // Table just created, creating some rows
-//     //       var insert =
-//     //         "INSERT INTO Users (Title, Notes, dateCreated, UserId) VALUES (?,?,?,?,?)";
-//     //       db.run(insert, [
-//     //         "First Task",
-//     //         "some notes",
-//     //         Date("now")
-//     //       ]);
-//     //       db.run(insert, [
-//     //         "Second Task",
-//     //         "some more notes",
-//     //         Date("now")
-//     //       ]);
-//     //       db.run(insert, [
-//     //         "Third Task",
-//     //         "user3@example.com",
-//     //         Date("now"),
-//     //       ]);
-//     //       db.run(insert, [
-//     //         "Fourth Task",
-//     //         "user4@example.com",
-//     //         Date("now"),
-//     //       ]);
-//     //     }
-//     //   }
-//     // );
-//   }
-// });
-
-// module.exports = db;
 
 app.use(
   express.urlencoded(),
