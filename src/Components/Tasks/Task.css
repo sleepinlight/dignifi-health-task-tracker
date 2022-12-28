@@ -3,10 +3,23 @@
   min-width: 360px;
 }
 
+.task-card-completed .ant-card-head-title {
+  opacity: 0.4;
+}
+
 .task-header-button {
   margin-left: 6px;
 }
 
 .task-complete-button {
   background-color: green;
+}
+
+.reminder-indicator {
+  background-color: #faad14;
+}
+
+.reminder-indicator:hover {
+  color: #ffffff;
+  border-color: unset;
 }

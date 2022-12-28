@@ -8,3 +8,15 @@ export interface Task {
   dateCreated: Date;
   userId: number;
 }
+
+export interface TaskForCreate {
+  title: string;
+  notes?: string;
+  reminderSet?: boolean;
+  reminderDate?: Date;
+  userId: number;
+}
+
+export interface TaskReminderForCreate {
+  reminderDate: Date;
+}

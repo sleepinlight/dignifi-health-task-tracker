@@ -49,3 +49,7 @@
 .create-task-button .ant-float-btn-body {
   background-color: green;
 }
+
+.create-task-buttons-container {
+  text-align: right;
+}
