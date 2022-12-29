@@ -2,6 +2,7 @@ import { Input, Checkbox, Button, Form, Card, Layout, message } from "antd";
 import React, { StrictMode } from "react";
 import { useQuery } from "react-query/types/react";
 import { useNavigate } from "react-router-dom";
+import baseUrl from "../Services/api";
 import { useAuth } from "../Shared/hooks/useAuth";
 
 const { Header, Content } = Layout;
@@ -17,7 +18,7 @@ const LoginPage: React.FC = () => {
 
   const onFinish = async (values: any) => {
     try {
-      let loginResponse = await fetch("http://localhost:3004/api/login", {
+      let loginResponse = await fetch(`${baseUrl}/api/login`, {
         method: "POST",
         body: JSON.stringify({
           email: values.email,
@@ -38,7 +39,6 @@ const LoginPage: React.FC = () => {
         login(data);
       }
     } catch (e) {
-      console.log("wtf");
       messageApi.open({
         type: "error",
         content: "Login failed!",

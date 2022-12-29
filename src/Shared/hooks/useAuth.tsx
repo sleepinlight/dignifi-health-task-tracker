@@ -16,7 +16,6 @@ export const AuthProvider = ({ children }: any) => {
 
   const login = async (data: any) => {
     setUser(data);
-    console.log(data);
     navigate("/");
   };
 

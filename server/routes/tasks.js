@@ -101,10 +101,6 @@ router.put("/api/task/:id/complete", (req, res, next) => {
 });
 
 router.put("/api/task/:id/reminder", (req, res, next) => {
-  const test = new Date();
-  console.log(test);
-  console.log(test.getTime());
-  console.log(setReminderDateDefault(new Date(), 10));
   if (req.params.id) {
     db.run(
       "UPDATE tasks SET reminderSet = ?, reminderDate = ? WHERE id = ?",

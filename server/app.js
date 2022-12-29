@@ -2,12 +2,9 @@ const express = require("express");
 const app = express();
 require("dotenv").config();
 const cors = require("cors");
-var jwt = require("jsonwebtoken");
-var bcrypt = require("bcrypt");
 var bodyParser = require("body-parser");
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-var db = require("./db");
 
 const auth = require("./middleware");
 

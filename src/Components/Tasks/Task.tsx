@@ -18,6 +18,7 @@ import {
 } from "antd";
 import React, { StrictMode, useState } from "react";
 import { useMutation, useQueryClient } from "react-query";
+import baseUrl from "../../Services/api";
 import { Task, TaskReminderForCreate } from "../../Shared/interfaces/Task";
 import "./Task.css";
 import TaskDecorator from "./TaskDecorator/TaskDecorator";
@@ -47,7 +48,7 @@ const TaskComponent: React.FC<TaskComponentProps> = (
   };
 
   const markTaskComplete = useMutation(() => {
-    return fetch(`http://localhost:3004/api/task/${props.task.id}/complete`, {
+    return fetch(`${baseUrl}/task/${props.task.id}/complete`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ completed: true }),
@@ -63,7 +64,7 @@ const TaskComponent: React.FC<TaskComponentProps> = (
   });
 
   const setTaskReminder = useMutation((values: TaskReminderForCreate) => {
-    return fetch(`http://localhost:3004/api/task/${props.task.id}/reminder`, {
+    return fetch(`${baseUrl}/task/${props.task.id}/reminder`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -82,10 +83,9 @@ const TaskComponent: React.FC<TaskComponentProps> = (
   });
 
   const deleteTask = useMutation(() => {
-    return fetch(`http://localhost:3004/api/task/${props.task.id}/delete`, {
+    return fetch(`${baseUrl}/task/${props.task.id}/delete`, {
       method: "DELETE",
     }).then((res) => {
-      console.log(res);
       if (res.ok) {
         props.onDeleteTaskCallback();
         queryClient.invalidateQueries("tasks");

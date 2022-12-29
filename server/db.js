@@ -6,11 +6,12 @@ const DBSOURCE = "tasksdb.sqlite";
 
 let db = new sqlite3.Database(DBSOURCE, (err) => {
   if (err) {
-    // Cannot open database
     console.error(err.message);
     throw err;
   } else {
     var salt = bcrypt.genSaltSync(10);
+
+    //Create DB and seed with initial records
 
     db.run(
       `CREATE TABLE IF NOT EXISTS Users (
@@ -25,9 +26,9 @@ let db = new sqlite3.Database(DBSOURCE, (err) => {
               )`,
       (err) => {
         if (err) {
-          // Table already created
+          console.error(err.message);
+          throw err;
         } else {
-          // Table just created, creating some rows
           var insert =
             "INSERT OR REPLACE INTO Users (username, email, password, salt, dateCreated) VALUES (?,?,?,?,?)";
           db.run(insert, [
@@ -76,9 +77,9 @@ let db = new sqlite3.Database(DBSOURCE, (err) => {
             )`,
       (err) => {
         if (err) {
-          // Table already created
+          console.error(err.message);
+          throw err;
         } else {
-          // Table just created, creating some rows
           var insert =
             "INSERT INTO Tasks (title, notes, dateCreated, userId) VALUES (?,?,?,?)";
           db.run(insert, ["First Task", "some notes", Date("now"), 1]);

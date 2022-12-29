@@ -1,6 +1,7 @@
 import { Input, Checkbox, Button, Form, Card, Layout, message } from "antd";
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import baseUrl from "../Services/api";
 
 const { Header, Content } = Layout;
 
@@ -14,20 +15,17 @@ const RegisterPage: React.FC = () => {
 
   const onFinish = async (values: any) => {
     try {
-      let createAccountResponse = await fetch(
-        "http://localhost:3004/api/register",
-        {
-          method: "POST",
-          body: JSON.stringify({
-            username: values.username,
-            email: values.email,
-            password: values.password,
-          }),
-          headers: {
-            "Content-type": "application/json; charset=UTF-8",
-          },
-        }
-      );
+      let createAccountResponse = await fetch(`${baseUrl}/register`, {
+        method: "POST",
+        body: JSON.stringify({
+          username: values.username,
+          email: values.email,
+          password: values.password,
+        }),
+        headers: {
+          "Content-type": "application/json; charset=UTF-8",
+        },
+      });
 
       let data = await createAccountResponse.json();
       if (createAccountResponse.ok) {

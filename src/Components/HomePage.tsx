@@ -19,6 +19,7 @@ import {
 import { Task, TaskForCreate } from "../Shared/interfaces/Task";
 import Moment from "moment";
 import { useAuth } from "../Shared/hooks/useAuth";
+import baseUrl from "../Services/api";
 
 const { Header, Content } = Layout;
 
@@ -55,8 +56,7 @@ const HomePage: React.FC = () => {
   };
 
   const createTask = useMutation((values: TaskForCreate) => {
-    console.log(values);
-    return fetch(`http://localhost:3004/api/tasks`, {
+    return fetch(`${baseUrl}/tasks`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -81,9 +81,7 @@ const HomePage: React.FC = () => {
     data,
   }: { isLoading: boolean; isFetching: boolean; error: any; data: any } =
     useQuery("tasks", () =>
-      fetch(`http://localhost:3004/api/tasks/${userId}`).then((res) =>
-        res.json()
-      )
+      fetch(`${baseUrl}/tasks/${userId}`).then((res) => res.json())
     );
 
   const onDeleteTask = (): void => {
