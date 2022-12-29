@@ -103,6 +103,16 @@ const HomePage: React.FC = () => {
     );
   };
 
+  const getTasksByCompletionStatus = (completed: boolean): Task[] => {
+    let tasks: Task[] = [];
+    if (data?.length > 0) {
+      tasks = completed
+        ? data.filter((x: Task) => x.completed)
+        : data.filter((x: Task) => !x.completed);
+    }
+    return tasks;
+  };
+
   useEffect(() => {
     if (data && data.length > 0) {
       const tasksWithReminders = getTasksWithValidReminders(data);
@@ -179,7 +189,7 @@ const HomePage: React.FC = () => {
             </Form>
           </Modal>
 
-          <div className="tasks-container">
+          <div className="tasks-container-outer">
             {parentContextHolder}
 
             <Spin
@@ -189,13 +199,40 @@ const HomePage: React.FC = () => {
               className="tasks-spin-loader"
             >
               {data && data.length > 0 ? (
-                data.map((task: any) => (
-                  <TaskComponent
-                    key={task.id}
-                    task={task}
-                    onDeleteTaskCallback={onDeleteTask}
-                  ></TaskComponent>
-                ))
+                <div className="tasks-container-inner">
+                  <div className="task-pane">
+                    <h3>Todo</h3>
+                    <hr></hr>
+                    {getTasksByCompletionStatus(false).map((task: any) => {
+                      if (!task.completed) {
+                        return (
+                          <TaskComponent
+                            key={task.id}
+                            task={task}
+                            onDeleteTaskCallback={onDeleteTask}
+                          ></TaskComponent>
+                        );
+                      }
+                    })}
+                  </div>
+                  {getTasksByCompletionStatus(true).length > 0 && (
+                    <div className="task-pane">
+                      <h3>Completed</h3>
+                      <hr></hr>
+                      {getTasksByCompletionStatus(true).map((task: any) => {
+                        if (task.completed) {
+                          return (
+                            <TaskComponent
+                              key={task.id}
+                              task={task}
+                              onDeleteTaskCallback={onDeleteTask}
+                            ></TaskComponent>
+                          );
+                        }
+                      })}
+                    </div>
+                  )}
+                </div>
               ) : (
                 <h3>
                   No tasks created! Click the button in the bottom right to get

@@ -47,6 +47,19 @@ const TaskComponent: React.FC<TaskComponentProps> = (
     setIsReminderModalOpen(false);
   };
 
+  const updateTaskCache = (taskForUpdate: Task): void => {
+    const previousTasks: Task[] = queryClient.getQueryData("tasks") || [];
+    const updatedTasks = [...previousTasks];
+    const taskIndex = updatedTasks.findIndex(
+      (task) => task.id === taskForUpdate.id
+    );
+
+    if (taskIndex !== -1) {
+      updatedTasks[taskIndex] = taskForUpdate;
+      queryClient.setQueryData("tasks", updatedTasks);
+    }
+  };
+
   const markTaskComplete = useMutation(() => {
     return fetch(`${baseUrl}/task/${props.task.id}/complete`, {
       method: "PUT",
@@ -59,6 +72,8 @@ const TaskComponent: React.FC<TaskComponentProps> = (
           type: "success",
           content: "Successfully completed task. Nice job!",
         });
+        const taskForUpdate = { ...props.task, completed: true };
+        updateTaskCache(taskForUpdate);
       }
     });
   });
@@ -78,6 +93,12 @@ const TaskComponent: React.FC<TaskComponentProps> = (
           type: "success",
           content: "Successfully created reminder.",
         });
+        const taskForUpdate = {
+          ...props.task,
+          reminderSet: true,
+          reminderDate: values.reminderDate,
+        };
+        updateTaskCache(taskForUpdate);
       }
     });
   });

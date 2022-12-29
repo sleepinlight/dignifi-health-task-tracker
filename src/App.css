@@ -50,9 +50,27 @@
   justify-content: space-around;
 }
 
-.tasks-container {
+.tasks-container-outer {
   margin: 50px auto;
-  width: 400px;
+  max-width: 800px;
+  min-width: 400px;
+}
+
+.tasks-container-inner {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.task-pane {
+  display: flex;
+  flex-direction: column;
+}
+
+.task-pane hr {
+  width: 95%;
+  border: 1px solid #faad14;
+  margin-bottom: 15px;
 }
 
 .tasks-spin-loader {
