@@ -234,10 +234,10 @@ const HomePage: React.FC = () => {
                   )}
                 </div>
               ) : (
-                <h3>
-                  No tasks created! Click the button in the bottom right to get
-                  started
-                </h3>
+                <div style={{ textAlign: "center" }}>
+                  <h3>No tasks created!</h3>
+                  <h4>Click the button in the bottom right to get started</h4>
+                </div>
               )}
             </Spin>
           </div>
