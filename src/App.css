@@ -37,6 +37,19 @@
   }
 }
 
+.header-bar-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  color: #ffffff;
+  max-height: 100%;
+  align-items: center;
+}
+
+.login-header-bar {
+  justify-content: space-around;
+}
+
 .tasks-container {
   margin: 50px auto;
   width: 400px;
@@ -52,4 +65,13 @@
 
 .create-task-buttons-container {
   text-align: right;
+}
+
+.auth-form-container {
+  margin: 50px auto;
+  width: 400px;
+}
+
+.auth-container-header {
+  text-align: center;
 }

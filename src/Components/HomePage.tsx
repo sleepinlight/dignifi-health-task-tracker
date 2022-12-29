@@ -14,16 +14,21 @@ import {
   Select,
   Spin,
   notification,
+  Layout,
 } from "antd";
 import { Task, TaskForCreate } from "../Shared/interfaces/Task";
 import Moment from "moment";
+import { useAuth } from "../Shared/hooks/useAuth";
+
+const { Header, Content } = Layout;
 
 const HomePage: React.FC = () => {
   const [isCreateTaskModalOpen, setIsCreateTaskModalOpen] =
     useState<boolean>(false);
   const [messageApi, parentContextHolder] = message.useMessage();
   const queryClient = useQueryClient();
-  const userId = 1;
+  const { user, logout }: any = useAuth();
+  const userId = user.id;
 
   const openRemindersNotification = (tasksWithReminders: Task[]) => {
     notification.open({
@@ -110,79 +115,105 @@ const HomePage: React.FC = () => {
   }, [data]);
 
   return (
-    <div>
-      <Modal
-        title="Create New Task"
-        open={isCreateTaskModalOpen}
-        onCancel={() => onDismissNewTaskModal()}
-        footer={null}
-      >
-        <Form
-          labelCol={{ span: 6 }}
-          wrapperCol={{ span: 14 }}
-          layout="horizontal"
-          onFinish={(values) => createTask.mutate(values)}
-        >
-          <Form.Item
-            label="Title"
-            name="title"
-            rules={[{ required: true, message: "Please include a task title" }]}
-          >
-            <Input />
-          </Form.Item>
-          <Form.Item label="Notes" name="notes">
-            <Input />
-          </Form.Item>
-          <Form.Item
-            label="Set Reminder"
-            name="reminderSet"
-            valuePropName="checked"
-          >
-            <Checkbox></Checkbox>
-          </Form.Item>
-
-          <Form.Item label="Reminder Date" name="reminderDate">
-            <DatePicker />
-          </Form.Item>
-          <div className="create-task-buttons-container">
-            <Button
-              onClick={() => onDismissNewTaskModal()}
-              style={{ marginRight: "10px" }}
-            >
-              Cancel
-            </Button>
-            <Button type="primary" htmlType="submit">
-              Submit
-            </Button>
+    <Layout>
+      <Header>
+        <div className="header-bar-container">
+          <div>
+            <h3>{`Welcome, ${user.username}`}</h3>
           </div>
-        </Form>
-      </Modal>
+          <div>
+            <h1>Task Tracker</h1>
+          </div>
+          <Button type="primary" onClick={() => logout()}>
+            Logout
+          </Button>
+        </div>
+      </Header>
+      <Content>
+        {" "}
+        <div>
+          <Modal
+            title="Create New Task"
+            open={isCreateTaskModalOpen}
+            onCancel={() => onDismissNewTaskModal()}
+            footer={null}
+          >
+            <Form
+              labelCol={{ span: 6 }}
+              wrapperCol={{ span: 14 }}
+              layout="horizontal"
+              onFinish={(values) => createTask.mutate(values)}
+            >
+              <Form.Item
+                label="Title"
+                name="title"
+                rules={[
+                  { required: true, message: "Please include a task title" },
+                ]}
+              >
+                <Input />
+              </Form.Item>
+              <Form.Item label="Notes" name="notes">
+                <Input />
+              </Form.Item>
+              <Form.Item
+                label="Set Reminder"
+                name="reminderSet"
+                valuePropName="checked"
+              >
+                <Checkbox></Checkbox>
+              </Form.Item>
 
-      <div className="tasks-container">
-        <h1>Task Tracker</h1>
-        {parentContextHolder}
-        <Spin
-          spinning={isLoading || isFetching}
-          size={"large"}
-          key={"spintask"}
-          className="tasks-spin-loader"
-        >
-          {data &&
-            data.map((task: any) => (
-              <TaskComponent
-                key={task.id}
-                task={task}
-                onDeleteTaskCallback={onDeleteTask}
-              ></TaskComponent>
-            ))}
-        </Spin>
-      </div>
-      <FloatButton
-        type="primary"
-        className="create-task-button"
-        onClick={() => onShowNewTaskModal()}
-      />
-    </div>
+              <Form.Item label="Reminder Date" name="reminderDate">
+                <DatePicker />
+              </Form.Item>
+              <div className="create-task-buttons-container">
+                <Button
+                  onClick={() => onDismissNewTaskModal()}
+                  style={{ marginRight: "10px" }}
+                >
+                  Cancel
+                </Button>
+                <Button type="primary" htmlType="submit">
+                  Submit
+                </Button>
+              </div>
+            </Form>
+          </Modal>
+
+          <div className="tasks-container">
+            {parentContextHolder}
+
+            <Spin
+              spinning={isLoading || isFetching}
+              size={"large"}
+              key={"spintask"}
+              className="tasks-spin-loader"
+            >
+              {data && data.length > 0 ? (
+                data.map((task: any) => (
+                  <TaskComponent
+                    key={task.id}
+                    task={task}
+                    onDeleteTaskCallback={onDeleteTask}
+                  ></TaskComponent>
+                ))
+              ) : (
+                <h3>
+                  No tasks created! Click the button in the bottom right to get
+                  started
+                </h3>
+              )}
+            </Spin>
+          </div>
+          <FloatButton
+            type="primary"
+            className="create-task-button"
+            onClick={() => onShowNewTaskModal()}
+          />
+        </div>
+      </Content>
+    </Layout>
   );
 };
 

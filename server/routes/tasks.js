@@ -1,6 +1,6 @@
 const express = require("express");
 const db = require("../db");
-const { body, validationResult, check } = require("express-validator");
+var router = express.Router();
 
 const coerceBoolean = (val) => {
   let boolVal = val;
@@ -13,8 +13,6 @@ const coerceBoolean = (val) => {
 const setReminderDateDefault = (date, minutes) => {
   return new Date(date.getTime() + minutes * 60000);
 };
-
-var router = express.Router();
 
 router.get(
   "/api/tasks/:userId",
