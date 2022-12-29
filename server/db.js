@@ -45,20 +45,6 @@ let db = new sqlite3.Database(DBSOURCE, (err) => {
             salt,
             Date("now"),
           ]);
-          db.run(insert, [
-            "user3",
-            "user3@example.com",
-            bcrypt.hashSync("user3", salt),
-            salt,
-            Date("now"),
-          ]);
-          db.run(insert, [
-            "user4",
-            "user4@example.com",
-            bcrypt.hashSync("user4", salt),
-            salt,
-            Date("now"),
-          ]);
         }
       }
     );
@@ -84,8 +70,8 @@ let db = new sqlite3.Database(DBSOURCE, (err) => {
             "INSERT INTO Tasks (title, notes, dateCreated, userId) VALUES (?,?,?,?)";
           db.run(insert, ["First Task", "some notes", Date("now"), 1]);
           db.run(insert, ["Second Task", "some more notes", Date("now"), 1]);
-          db.run(insert, ["Third Task", "user3@example.com", Date("now"), 2]);
-          db.run(insert, ["Fourth Task", "user4@example.com", Date("now"), 1]);
+          db.run(insert, ["Third Task", "even more notes", Date("now"), 2]);
+          db.run(insert, ["Fourth Task", "notes again", Date("now"), 1]);
         }
       }
     );
