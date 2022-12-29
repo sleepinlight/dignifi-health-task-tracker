@@ -18,7 +18,7 @@ const LoginPage: React.FC = () => {
 
   const onFinish = async (values: any) => {
     try {
-      let loginResponse = await fetch(`${baseUrl}/api/login`, {
+      let loginResponse = await fetch(`${baseUrl}/login`, {
         method: "POST",
         body: JSON.stringify({
           email: values.email,

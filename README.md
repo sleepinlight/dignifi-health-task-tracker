@@ -1,6 +1,6 @@
 ## Steps for running this application
 
-1. clone `sample.env` to create a `.env` file in the root directory. The `TOKEN_KEY` value within can be any string you like.
+1. In the `/server` directory, clone `sample.env` to create a `.env` file in this directory. The `TOKEN_KEY` value within can be any string you like.
 2. run `npm install` in the root directory.
 3. In a second terminal, run `npm install` in the `/server` directory.
 4. Ensure you have nothing running on ports `3000` and `3004`.
